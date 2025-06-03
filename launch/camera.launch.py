@@ -26,12 +26,14 @@ def generate_launch_description():
                     plugin='AprilTagNode',
                     name='apriltag',
                     remappings=[
-                        ('image_rect', [camera_name, '/color/image_raw']),
-                        ('camera_info', [camera_name, '/color/camera_info']),
+                        ('image_rect', [camera_name, TextSubstitution(text='/color/image_raw')]),
+                        ('camera_info', [camera_name, TextSubstitution(text='/color/camera_info')]),
                     ],
                     parameters=[{
                         'tag_family': '36h11',
-                        'size': 0.16
+                        'size': 0.174,  # Fixed: 17.4cm converted to meters
+                        'max_hamming': 0,  # Add this for better detection
+                        'z_up': True       # Add this if your coordinate frame needs it
                     }]
                 )
             ],
