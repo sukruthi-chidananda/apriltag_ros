@@ -26,14 +26,19 @@ def generate_launch_description():
                     plugin='AprilTagNode',
                     name='apriltag',
                     remappings=[
+                        # Input topic remappings
                         ('image_rect', [camera_name, TextSubstitution(text='/color/image_raw')]),
                         ('camera_info', [camera_name, TextSubstitution(text='/color/camera_info')]),
+                        # Output topic remappings
+                        ('detections', [camera_name, TextSubstitution(text='/apriltag/detections')]),
+                        ('tf', [camera_name, TextSubstitution(text='/apriltag/tf')]),
                     ],
                     parameters=[{
                         'tag_family': '36h11',
                         'size': 0.174,  # Fixed: 17.4cm converted to meters
                         'max_hamming': 0,  # Add this for better detection
-                        'z_up': True       # Add this if your coordinate frame needs it
+                        'z_up': True,      # Add this if your coordinate frame needs it
+                        'publish_tf': True # Ensure TF is published
                     }]
                 )
             ],
