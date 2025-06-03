@@ -1,7 +1,8 @@
 from launch import LaunchDescription
-from launch_ros.actions import ComposableNodeContainer
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, TextSubstitution
+from launch.substitutions import PathJoinSubstitution
+from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
 
 def generate_launch_description():
@@ -16,7 +17,7 @@ def generate_launch_description():
 
         ComposableNodeContainer(
             name='apriltag_container',
-            namespace='apriltag_' + camera_name.perform({}),
+            namespace=LaunchConfiguration('camera_name'),
             package='rclcpp_components',
             executable='component_container',
             composable_node_descriptions=[
@@ -26,11 +27,11 @@ def generate_launch_description():
                     name='apriltag',
                     remappings=[
                         ('image_rect', [camera_name, '/color/image_raw']),
-                        ('camera_info', [camera_name, '/color/camera_info'])
+                        ('camera_info', [camera_name, '/color/camera_info']),
                     ],
                     parameters=[{
                         'tag_family': '36h11',
-                        'size': 0.16  # meters, update based on your tag
+                        'size': 0.16
                     }]
                 )
             ],
